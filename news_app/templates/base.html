@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}QazNews{% endblock %} | QazNews</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" id="menuOverlay" onclick="closeMobileMenu()" style="display:none;"></div>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" onclick="closeMobileMenu()">&#10005;</button>
+    <nav>
+        <a href="{% url 'home_page' %}">Главная</a>
+        <a href="{% url 'all_news_page' %}">Все новости</a>
+        {% for category in categories %}
+        <a href="{% url 'news_by_category' pk=category.pk %}">{{ category.name }}</a>
+        {% endfor %}
+        <a href="{% url 'search_page' %}">Поиск</a>
+    </nav>
+</div>
+
+<header class="header">
+    <!-- Top bar -->
+    <div class="primary-header">
+        <div class="container">
+            <nav class="main-nav">
+                <a href="{% url 'home_page' %}">Главная</a>
+                <a href="{% url 'all_news_page' %}">Новости</a>
+                <a href="#">О нас</a>
+                <a href="#">Контакты</a>
+            </nav>
+            <nav class="social-nav">
+                <a href="#"><img src="{% static 'img/threads.svg' %}" alt="Threads"></a>
+                <a href="#"><img src="{% static 'img/telegram.svg' %}" alt="Telegram"></a>
+                <a href="#"><img src="{% static 'img/instagram.svg' %}" alt="Instagram"></a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Logo bar -->
+    <div class="secondary-header">
+        <div class="container">
+            <button class="hamburger" onclick="openMobileMenu()" aria-label="Меню">
+                <span></span><span></span><span></span>
+            </button>
+            <a href="{% url 'admin:index' %}" class="login-link">
+                <img src="{% static 'img/user.svg' %}" alt="">
+                <span>Войти</span>
+            </a>
+            <a href="{% url 'home_page' %}" class="logo">
+                <img src="{% static 'img/logo.svg' %}" alt="QazNews">
+            </a>
+            <a href="tel:+77771234567" class="phone-link">
+                <img src="{% static 'img/phone.svg' %}" alt="">
+                <span>+7 777 123 45 67</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Category nav -->
+    <div class="third-header">
+        <div class="container">
+            <nav class="category-nav">
+                <a href="{% url 'all_news_page' %}">Все</a>
+                {% for category in categories %}
+                <a href="{% url 'news_by_category' pk=category.pk %}">{{ category.name }}</a>
+                {% endfor %}
+            </nav>
+            <a href="{% url 'search_page' %}" class="search-link">
+                <img src="{% static 'img/search.svg' %}" alt="">
+                <span>Поиск</span>
+            </a>
+        </div>
+    </div>
+</header>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <a href="{% url 'home_page' %}"><img src="{% static 'img/logo-white.svg' %}" alt="QazNews"></a>
+        <p>&copy; ТОО QazNews 2026. Все права защищены.</p>
+    </div>
+</footer>
+
+<script>
+function openMobileMenu() {
+    document.getElementById('mobileMenu').classList.add('open');
+    document.getElementById('menuOverlay').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+function closeMobileMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.getElementById('menuOverlay').style.display = 'none';
+    document.body.style.overflow = '';
+}
+</script>
+</body>
+</html>

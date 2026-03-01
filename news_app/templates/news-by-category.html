@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>{{ category.name }}</h1>
+        <p>Найдено {{ posts|length }} новостей</p>
+    </div>
+</div>
+
+<section class="news-block">
+    <div class="container">
+        <div class="news-block-layout">
+            <div class="news-main">
+                <h2>Новости: {{ category.name }}</h2>
+                {% for post in posts %}
+                <div class="news-block__card">
+                    <img src="{{ post.image_url }}" alt="{{ post.title }}" class="news-block__img">
+                    <div class="news-block__info">
+                        <h4>{{ post.title|truncatewords:8 }}</h4>
+                        <span class="date">{{ post.created_at|date:"d.m.Y" }}</span>
+                        <a href="{% url 'news_by_category' pk=post.category.pk %}" class="cat-link">#{{ post.category.name }}</a>
+                        <p>{{ post.content|truncatewords:25 }}</p>
+                        <a href="{% url 'read_news_page' pk=post.pk %}" class="read-btn">Читать →</a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="alert-danger">
+                    <h5>Новостей нет</h5>
+                    <p>В этой категории пока нет новостей</p>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="adv-block-content">
+                <h3>Реклама</h3>
+                <div class="adv-block__info">
+                    {% for adv in advs %}
+                    <img src="{{ adv.image_url }}" alt="{{ adv.name }}" title="{{ adv.name }}">
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

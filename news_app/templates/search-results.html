@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Поиск: {{ query }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>Результаты поиска</h1>
+        <p>Поиск по запросу: "{{ query }}"</p>
+    </div>
+</div>
+
+<section class="news-block">
+    <div class="container">
+        <div class="news-block-layout">
+            <div class="news-main">
+                <h2>
+                    {% if results %}
+                        "{{ query }}" — найдено {{ results|length }} новостей
+                    {% else %}
+                        Ничего не найдено
+                    {% endif %}
+                </h2>
+
+                {% if results %}
+                    {% for post in results %}
+                    <div class="news-block__card">
+                        <img src="{{ post.image_url }}" alt="{{ post.title }}" class="news-block__img">
+                        <div class="news-block__info">
+                            <h4>{{ post.title|truncatewords:8 }}</h4>
+                            <span class="date">{{ post.created_at|date:"d.m.Y" }}</span>
+                            <a href="{% url 'news_by_category' pk=post.category.pk %}" class="cat-link">#{{ post.category.name }}</a>
+                            <p>{{ post.content|truncatewords:25 }}</p>
+                            <a href="{% url 'read_news_page' pk=post.pk %}" class="read-btn">Читать →</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert-danger">
+                        <h5>Новости не найдены 😔</h5>
+                        <p>По запросу "{{ query }}" ничего не найдено. Попробуйте другие слова.</p>
+                    </div>
+                    <div class="see-all-wrap" style="margin-top:20px;">
+                        <a href="{% url 'search_page' %}" class="see-all-btn">← Вернуться к поиску</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="adv-block-content">
+                <h3>Реклама</h3>
+                <div class="adv-block__info">
+                    {% for adv in advs %}
+                    <img src="{{ adv.image_url }}" alt="{{ adv.name }}" title="{{ adv.name }}">
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+{% if results|length == 0 and query %}
+window.addEventListener('DOMContentLoaded', function() {
+    alert('По запросу "{{ query }}" ничего не найдено.');
+});
+{% endif %}
+</script>
+{% endblock %}

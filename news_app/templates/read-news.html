@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<section class="news-block">
+    <div class="container">
+        <div class="news-block-layout">
+            <div class="news-main read-news-content">
+                <div class="breadcrumb">
+                    <a href="{% url 'home_page' %}">Главная</a>
+                    <span>/</span>
+                    <a href="{% url 'news_by_category' pk=post.category.pk %}">{{ post.category.name }}</a>
+                    <span>/</span>
+                    <span>{{ post.title|truncatewords:5 }}</span>
+                </div>
+
+                <h1>{{ post.title }}</h1>
+                <div class="post-meta">
+                    <span class="date">{{ post.created_at|date:"d.m.Y" }}</span>
+                    <a href="{% url 'news_by_category' pk=post.category.pk %}" class="category-badge">{{ post.category.name }}</a>
+                </div>
+                <img src="{{ post.image_url }}" alt="{{ post.title }}" class="rounded-img">
+                <div class="post-body">{{ post.content }}</div>
+
+                {% if related_posts %}
+                <div class="related-posts">
+                    <h3>Похожие новости</h3>
+                    <div class="related-grid">
+                        {% for rpost in related_posts %}
+                        <a href="{% url 'read_news_page' pk=rpost.pk %}" class="related-card">
+                            <img src="{{ rpost.image_url }}" alt="{{ rpost.title }}">
+                            <div class="related-card-info">
+                                <h5>{{ rpost.title|truncatewords:8 }}</h5>
+                                <span class="date">{{ rpost.created_at|date:"d.m.Y" }}</span>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="adv-block-content">
+                <h3>Реклама</h3>
+                <div class="adv-block__info">
+                    {% for adv in advs %}
+                    <img src="{{ adv.image_url }}" alt="{{ adv.name }}" title="{{ adv.name }}">
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

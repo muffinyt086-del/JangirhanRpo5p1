@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<section class="hot-news">
+    <div class="container">
+        <h2>🔥 Горячие новости сегодня</h2>
+        <div class="hot-news-grid">
+            {% for post in hot_posts %}
+            <a href="{% url 'read_news_page' pk=post.pk %}" class="hot-news__item"
+               style="background: url('{{ post.image_url }}'); background-size:cover; background-position:center;">
+                <span class="category-badge">{{ post.category.name }}</span>
+                <h3>{{ post.title|truncatewords:10 }}</h3>
+                <span>{{ post.created_at|date:"d.m.Y" }}</span>
+            </a>
+            {% empty %}
+            <p style="color:#fff;">Новостей нет</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="news-block">
+    <div class="container">
+        <div class="news-block-layout">
+            <div class="news-main">
+                <h2>Последние новости</h2>
+                {% for post in posts %}
+                <div class="news-block__card">
+                    <img src="{{ post.image_url }}" alt="{{ post.title }}" class="news-block__img">
+                    <div class="news-block__info">
+                        <h4>{{ post.title|truncatewords:8 }}</h4>
+                        <span class="date">{{ post.created_at|date:"d.m.Y" }}</span>
+                        <a href="{% url 'news_by_category' pk=post.category.pk %}" class="cat-link">#{{ post.category.name }}</a>
+                        <p>{{ post.content|truncatewords:25 }}</p>
+                        <a href="{% url 'read_news_page' pk=post.pk %}" class="read-btn">Читать →</a>
+                    </div>
+                </div>
+                {% empty %}
+                <p>Новостей нет</p>
+                {% endfor %}
+                <div class="see-all-wrap">
+                    <a href="{% url 'all_news_page' %}" class="see-all-btn">Смотреть все новости →</a>
+                </div>
+            </div>
+            <div class="adv-block-content">
+                <h3>Реклама</h3>
+                <div class="adv-block__info">
+                    {% for adv in advs %}
+                    <img src="{{ adv.image_url }}" alt="{{ adv.name }}" title="{{ adv.name }}">
+                    {% empty %}
+                    <p>Реклама отсутствует</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

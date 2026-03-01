@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Поиск{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>Поиск новостей</h1>
+        <p>Ищите по заголовку или содержанию</p>
+    </div>
+</div>
+
+<section class="news-block">
+    <div class="container">
+        <div class="news-block-layout">
+            <div class="news-main">
+                <div class="search-form-wrap">
+                    <h2>Поиск</h2>
+                    <form action="{% url 'search_results' %}" method="get">
+                        <label for="q">Введите заголовок или описание новости</label>
+                        <input id="q" name="q" type="text" placeholder="Например: политика, спорт, технологии..." required>
+                        <button type="submit">🔍 Найти</button>
+                    </form>
+                </div>
+            </div>
+            <div class="adv-block-content">
+                <h3>Реклама</h3>
+                <div class="adv-block__info">
+                    {% for adv in advs %}
+                    <img src="{{ adv.image_url }}" alt="{{ adv.name }}" title="{{ adv.name }}">
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
